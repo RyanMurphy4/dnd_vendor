@@ -31,7 +31,6 @@ def generate_random_ring(num_stats) -> Ring:
             continue
         if chosen_stat in primary_damage_stats:
             if has_2_damage:
-                print("-- Ring already has a primary damage stat! --")
                 continue
             else:
                 has_2_damage = True
@@ -45,11 +44,24 @@ def generate_random_ring(num_stats) -> Ring:
         i += 1
     return Ring(stats)
 
-os.system('clear')
-for _ in range(100):
-    temp_ring = generate_random_ring(3)
-    if temp_ring.worth_buying():
-        print(f"{temp_ring=}")
-        print("\n")
+
+def test_rings(num_rings: int, verbose=False) -> int:
+    '''
+    num_rings: Number of rings that will be created and checked.
+
+    Returns number of rings that satisfy purchase requirements
+    '''
+    worth = 0 
+    for _ in range(num_rings):
+        temp_ring = generate_random_ring(3)
+        if temp_ring.worth_buying():
+            if verbose:
+                print(f"{temp_ring=}")
+                print("\n")
+            worth += 1
+    if verbose:
+        print(f"Total rings purchased: {worth}/{num_rings}")
+    return worth
 
 
+test_rings(10_000, verbose=True)
