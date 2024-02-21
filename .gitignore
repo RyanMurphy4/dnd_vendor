@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 test_code.py
+item_notes/
+images/
+slots/__pycache__
