@@ -8,6 +8,8 @@ import cv2 as cv
 import os 
 from .item_finder import find_item
 import pyautogui
+from typing import Union
+
 
 TOP_LEFT_X, TOP_LEFT_Y = 55,246
 BOTTOM_RIGHT_X, BOTTOM_RIGHT_Y = 552, 991
@@ -22,7 +24,6 @@ class Screencap:
 
         # self.DAD = pyautogui.getWindowsWithTitle('Dark and Darker  ')[0]
         # self.DAD.activate()
-
 
     @staticmethod
     def take_screenshot():
@@ -80,7 +81,7 @@ class Screencap:
         return trader_inventory
     
     # Crops out the rectangle containing the items stats
-    def get_item_stats_img(self, screenshot: np.array) -> np.array:
+    def get_item_stats_img(self, screenshot: np.array, index: int=1) -> np.array:
         '''
         Applies adaptive thresholding to the image to crop the image
         capturing the items stats.
@@ -93,21 +94,12 @@ class Screencap:
                              C=0)
         contours, _ = cv.findContours(adapt, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=cv.contourArea, reverse=True)
-        x, y, w, h = cv.boundingRect(contours[1]) #May need to be adjusted 
+
+        x, y, w, h = cv.boundingRect(contours[index]) #May need to be adjusted 
         region = screenshot[y: y + h, x: x + w]
 
-        return region 
-    
-    def contains_green_item(self, region: np.array) -> bool:
-        '''
-        Checks if the image contains the color green.
-        This indicates if we've found the item that is uncommon. 
-        '''
-        green = np.array([7, 168, 104])
-        contains_green = np.any(np.all(region == green, axis=-1))
+        return region
 
-        return contains_green
-    
     # If threshold is set < .98 golden/ruby/cobalt armor items get detected multiple times.
     def get_relevant_coords(self, thresh: float=.98) -> dict:
         '''
@@ -129,6 +121,7 @@ class Screencap:
         
         return image_coords
     
+    # Get a list of (x,y) coordinates for text on screen.
     def get_text_locs(self, ocr_results: list) -> dict:
         '''
         Takes a list of results from easyocr and populates a 
@@ -152,43 +145,91 @@ class Screencap:
 
             return results_dict
         
-    def find_uncommon_item(self):
-        #Capture Trader inventory.
-        trader_inventory = self.capture_trader_inventory()
-
-        #Check for items in the merchant inventory.
-        located_items = self.get_relevant_coords()
-
-        for coords in located_items.values():
-            for coord in coords:
-                item_name = [k for k, v in located_items.items() if coord[0] in v[0]]
-                x = coord[0]
-                y = coord[1]
-                pyautogui.moveTo(x, y, duration=.5)
-                time.sleep(1)
-                item_stats = self.get_item_stats_img(self.take_screenshot())
-
-                if self.contains_green_item(item_stats):
-                    print(f"{item_name} is uncommon")
-                    uncommon_item = self.get_item_stats_img(self.take_screenshot())
-                    return uncommon_item
-    
     # Filters out blue stats (random stats)
+    # Performing OCR on image without cropping works just fine.
+        # This function is mainly intended for logging items seen.
     def get_uncommon_stat_img(self, screenshot: np.array) -> np.array:
         '''
         Filter out blue colored to text in the image
         return the numpy array for OCR.
         '''
         hsv_image = cv.cvtColor(screenshot, cv.COLOR_BGR2HSV)
-        lower_blue = np.array([99, 55, 55])
+        # lower_blue = np.array([99, 55, 55])
+        # upper_blue = np.array([130, 255, 255])
+        lower_blue = np.array([55, 55, 55])
         upper_blue = np.array([130, 255, 255])
+
         mask = cv.inRange(hsv_image, lower_blue, upper_blue)
         result = cv.bitwise_and(screenshot, screenshot, mask=mask)
 
         return result 
+
+    # Remove all characters except for integers.
+    @staticmethod
+    def filter_stat_value(string: str) -> Union[int, float, None]:
+        stat_value = "".join([c for c in string if c.isnumeric() or c == '.'])
+        if stat_value and '.' in stat_value:
+            try:
+                return float(stat_value)
+            except Exception as e:
+                # print(f"Unable to convert '{stat_value}' to float. {e}")
+                pass
+        else:
+            try:
+                return int(stat_value)
+            except Exception as e:
+                # print(f"Unable to convert '{stat_value}' to integer {e}")
+                pass
+        
+        return None
     
-    def get_static_stat_img(self, screenshot: np.array) -> np.array:
-        gray_screenshot = cv.cvtColor(screenshot, cv.COLOR_BGR2GRAY)
-        thresh = cv.threshold(gray_screenshot, 20, 255, type=1)
-        return thresh[1]
+    # Returns only characters, with leading/trailing white space removed.
+    @staticmethod    
+    def filter_stat_name(string: str) -> Union[str, None]:
+        stat_name = "".join([c for c in string if c.isalpha() or c == " "]).strip()
+        if stat_name:
+            return stat_name
+        return None
     
+    def create_stats_dict(self, image: np.array, reader, all_stats: list[str]) -> dict:
+        stats = {
+            "random_stats" : {},
+            "static_stats": {},
+        }
+        
+        results = reader.readtext(image, detail=False, paragraph=False, height_ths=.9, width_ths=.9)
+        try:
+            stats['item_name'] = results[0]
+        except Exception as e:
+            pass
+
+        for result in results:
+            print(result)
+
+        print("\n")
+
+        for line in results:
+            random = False
+            if "+" in line:
+                random = True
+            stat_name = self.filter_stat_name(line)
+            stat_value = self.filter_stat_value(line)
+            if stat_name and stat_name in all_stats:    
+                if random:
+                    stats['random_stats'][stat_name] = stat_value
+                else:
+                    stats['static_stats'][stat_name] = stat_value
+        return stats
+    
+    def ensure_stats_dict(self, image: np.array, reader, all_stats: list[str]) -> dict:
+        i = 1
+        while True:
+            stats_image = self.get_item_stats_img(image, i)
+            stats_dict = self.create_stats_dict(stats_image, reader, all_stats)
+            if not stats_dict.get('random_stats'):
+                if i == 10:
+                    return {}
+                i += 1
+                continue
+            else:
+                return stats_dict

@@ -11,6 +11,7 @@ stats = [
     'Magic Penetration',
     'Magic Resistance',
     'Additional Magical Damage',
+    'Magical Damage',
     'Magical Damage Bonus',
     'Magical Damage Reduction',
     'True Magical Damage',
@@ -20,6 +21,7 @@ stats = [
     'Max Health',
     'Max Health Bonus',
     'Additional Memory Capacity',
+    'Memory Capacity Bonus',
     'Additional Move Speed',
     'Move Speed Bonus',
     'Additional Physical Damage',
@@ -35,5 +37,7 @@ stats = [
     'Spell Casting Speed',
     'Strength',
     'Vigor',
-    'Will'
+    'Will',
+    'Move Speed',
+    'Luck',
 ]

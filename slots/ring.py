@@ -18,6 +18,7 @@ class Ring:
         "Max Health Bonus": 2.0,
         "Magical Healing": 2
     }
+    
     primary_physical_stat = [
         'Additional Physical Damage',
         'True Physical Damage',
@@ -58,8 +59,8 @@ class Ring:
     primary_damage_stats = primary_physical_stat + primary_magical_stat
 
     def __init__(self, item_stats: dict=None):
-        self.item_stats = item_stats
-        self.num_stats = len(item_stats)
+        self.item_stats = item_stats.get('random_stats')
+        self.num_stats = len(item_stats.get('random_stats'))
         self.magical_ring = False
         self.physical_ring = False
 
@@ -125,12 +126,3 @@ class Ring:
     def __repr__(self) -> str:
         return f"{self.item_stats}"
 
-'''
-Best ring: Physical power, physical damage bonus, additional physical
-Good ring: +2 phys/mag DAMAGW, +3 mag/phys POWER, +3/+0.9% Move speed/move speed bonus
-For now, skip all other rings.
-
-interaction speed/ action speed/ health/
-
-Can you get +2 healing, +2 mag damage, +3 movement speed?
-'''
