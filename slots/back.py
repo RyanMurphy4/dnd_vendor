@@ -25,5 +25,6 @@ class Back:
     "Resourcefulness": 0,
     }
 
-    def __init__(self, item_stats: dict):
+    def __init__(self, item_stats: dict=None, item_name: str=None):
+        self.item_name = item_name
         self.item_stats = item_stats

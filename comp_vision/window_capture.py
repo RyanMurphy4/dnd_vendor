@@ -220,10 +220,6 @@ class Screencap:
             "static_stats": {},
         }
         results = reader.readtext(image, detail=False, paragraph=False, height_ths=.9, width_ths=.9)
-        try:
-            stats['item_name'] = results[0]
-        except Exception as e:
-            pass
 
         for result in results:
             print(result)

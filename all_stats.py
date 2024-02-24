@@ -83,8 +83,8 @@ categories = {
     }
 
 def create_item(img_name: str, stats: dict, categories: dict) -> Union[Back, Chest, Foot, Hands, Head, Legs, Necklace, Ring]:
-
+    item_name = img_name.replace('.png', '')
     item_type = categories[img_name]
-    return item_type(stats)
+    return item_type(stats, item_name)
 
     

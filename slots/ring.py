@@ -58,7 +58,8 @@ class Ring:
     magical_stats = primary_magical_stat + secondary_magical_stat
     primary_damage_stats = primary_physical_stat + primary_magical_stat
 
-    def __init__(self, item_stats: dict=None):
+    def __init__(self, item_stats: dict=None, item_name: str=None):
+        self.item_name = item_name
         self.item_stats = item_stats.get('random_stats')
         self.num_stats = len(item_stats.get('random_stats'))
         self.magical_ring = False

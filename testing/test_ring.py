@@ -51,7 +51,7 @@ def generate_random_ring(num_stats) -> Ring:
             generated_stat_value = random.randint(1, chosen_stat_max)
         stats[chosen_stat] = generated_stat_value
         i += 1
-    return Ring(stats)
+    return Ring(stats, "Doesn't matter")
 
 
 def test_rings(num_rings: int, verbose=False) -> int:
@@ -87,9 +87,6 @@ def test_get_stats_dict(reader):
                 print(f"Random_stats: {stats_dict['random_stats']}")
                 print('\n')
                 print(f"static_stats: {stats_dict['static_stats']}")
-
-            # new_ring = Ring(stats_dict)
-            # print(f"RING IS: {new_ring}")
 
         if keyboard.is_pressed('q'):
             exit()
