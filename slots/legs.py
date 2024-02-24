@@ -27,4 +27,6 @@ class Legs:
             "True Magical Damage": 0,
             "Armor Penetration": 0,            
         }
-        
+    
+    def __repr__(self) -> str:
+        return f"{self.item_stats}"

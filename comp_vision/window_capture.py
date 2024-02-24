@@ -121,6 +121,29 @@ class Screencap:
         
         return image_coords
     
+    def get_single_item_location(self, item_image_name: str, threshold: float) -> dict:
+        '''
+        item_image_name: image name from images/... Example --  "grimsmile.png"
+        game_ss: Screenshot of trader inventory
+        threshold: Threshold for sensitivity of template matching.
+        '''
+        item_locations = {}
+        tl_x = self.trader_inventory_TL[0]
+        tl_y = self.trader_inventory_TL[1]
+        image = cv.imread(f"images/{item_image_name}")
+
+        results = find_item(self.capture_trader_inventory(), image, threshold=threshold)
+        
+        if results:
+            adjusted_coords = []
+            for result in results:
+                x, y = result[0] + tl_x, result[1] + tl_y
+                adjusted_coords.append((x,y))
+            item_locations[item_image_name] = adjusted_coords
+    
+        return item_locations
+    
+
     # Get a list of (x,y) coordinates for text on screen.
     def get_text_locs(self, ocr_results: list) -> dict:
         '''
@@ -196,7 +219,6 @@ class Screencap:
             "random_stats" : {},
             "static_stats": {},
         }
-        
         results = reader.readtext(image, detail=False, paragraph=False, height_ths=.9, width_ths=.9)
         try:
             stats['item_name'] = results[0]
@@ -205,9 +227,7 @@ class Screencap:
 
         for result in results:
             print(result)
-
         print("\n")
-
         for line in results:
             random = False
             if "+" in line:
