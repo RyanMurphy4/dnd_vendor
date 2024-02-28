@@ -36,15 +36,9 @@ class Chest:
     ]
 
     comp_stats_rubysilver = [
-        'Dexterity',
         'Action Speed',
-        'Vigor',
+        'Vigor'
     ]
-
-    rubysilver_attr = [
-        
-    ] 
-    
     def __init__(self, item_stats: dict=None, item_name: str=None):
         self.item_name = item_name
         self.random_stats = item_stats.get('random_stats', None)
@@ -54,6 +48,9 @@ class Chest:
          
     def check_static_health(self, threshold) -> bool:
         health_value = self.static_stats.get('Max Health Bonus')
+        if not health_value:
+            return False
+    
         max_value = 5.0
 
         if (max_value - health_value) <= threshold:
@@ -102,16 +99,19 @@ class Chest:
         num_health_stats, health_stats = self.check_stats(self.health_stats, 1, .5)
         num_comp_stats , comp_stats = self.check_stats(self.comp_stats_rubysilver, 0, .3)
 
-        
-        if num_phys_stats == 2:
-            if num_health_stats or num_comp_stats:
+        total = sum([num_phys_stats, num_health_stats, num_comp_stats])
+        if total:
+            if not total % 3:
+                print("stopped at sum")
                 return True
-            if "Vigor" in list(self.random_stats.keys()):
-                if self.random_stats.get('Vigor') == 2:
-                    return True
-            
+        
+        if num_phys_stats == 2: 
+            if num_health_stats or num_comp_stats:
+                print("Stopped at num_phys_stats")
+                return True
         if num_health_stats == 2:
             if num_phys_stats or num_comp_stats:
+                print("Stopped at num_health_stats")
                 return True
         
         return False

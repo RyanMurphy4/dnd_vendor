@@ -22,6 +22,9 @@ def create_random_chest(num_stats, item_name) -> Chest:
         if item_name == 'tri-pelt doublet':
             if chosen_stat == 'Max Health Bonus':
                 continue
+        if item_name == "rubysilver doublet":
+            if chosen_stat == "Dexterity":
+                continue
 
         if chosen_stat in stats:
             continue
@@ -46,17 +49,7 @@ def test_worth_buying(num_stats: int, item_name: str) -> Chest:
             finished = True
         count += 1
     print(f"Created {count:,} {item_name}'s before one was worth buying.")
-    return doublet
+    return doublet, count
 
-start = perf_counter()
-for _ in range(19):
-    result = test_worth_buying(2, 'tri-pelt doublet')
-    print(result)
-print(f"This took {perf_counter() - start}")
-
-start = perf_counter()
-for _ in range(19):
-    res = test_worth_buying(3, 'rubysilver doublet')
-    print(res)
-    print("\n")
-print(f"This took {perf_counter() - start}")
+test_worth_buying(2, 'tri-pelt doublet')
+test_worth_buying(3, 'rubysilver doublet')

@@ -133,7 +133,7 @@ class Screencap:
         image = cv.imread(f"images/{item_image_name}")
 
         results = find_item(self.capture_trader_inventory(), image, threshold=threshold)
-        
+                
         if results:
             adjusted_coords = []
             for result in results:
@@ -219,11 +219,10 @@ class Screencap:
             "random_stats" : {},
             "static_stats": {},
         }
-        results = reader.readtext(image, detail=False, paragraph=False, height_ths=.9, width_ths=.9)
-
-        for result in results:
-            print(result)
-        print("\n")
+        start = time.perf_counter()
+        image = cv.fastNlMeansDenoising(image)
+        print(f"Denoising took: {time.perf_counter() - start}")
+        results = reader.readtext(image, detail=False, paragraph=False, height_ths=.8, width_ths=.8)
         for line in results:
             random = False
             if "+" in line:
@@ -236,16 +235,27 @@ class Screencap:
                 else:
                     stats['static_stats'][stat_name] = stat_value
         return stats
-    
     def ensure_stats_dict(self, image: np.array, reader, all_stats: list[str]) -> dict:
-        i = 1
+        i = -1
         while True:
+            i += 1
+            if i == 10:
+                return {}
+            
+            none_value = False
             stats_image = self.get_item_stats_img(image, i)
             stats_dict = self.create_stats_dict(stats_image, reader, all_stats)
-            if not stats_dict.get('random_stats'):
-                if i == 10:
-                    return {}
-                i += 1
-                continue
-            else:
+            random_stats = stats_dict['random_stats'].values()
+            static_stats = stats_dict['static_stats'].values()
+
+            none_value = None in random_stats or None in static_stats
+
+            if not none_value:
+                print(f"random: {stats_dict['random_stats']} | static: {stats_dict['static_stats']} | Shape: {stats_image.shape} ")
                 return stats_dict
+                
+    def can_afford(self) -> bool:
+        screenshot = self.take_screenshot()
+        if screenshot[995][999][0] == 53:
+            return True
+        return False

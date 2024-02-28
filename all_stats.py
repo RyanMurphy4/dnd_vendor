@@ -65,12 +65,12 @@ categories = {
     "golden plate boots.png": Foot,
     "golden plate pants.png": Legs,
     "golden plate.png": Chest,
-    "grimsmile.png": Ring,
+    "grimsmile.png": (Ring, .7),
     "heavy leather leggings.png": Legs,
     "rubysilver adventurer boots.png": Foot,
     "rubysilver barbuta helm.png": Head,
     "rubysilver cap.png": Head,
-    "rubysilver doublet.png": Chest,
+    "rubysilver doublet.png": (Chest, .89),
     "rubysilver gauntlets.png": Hands,
     "rubysilver hood.png": Head,
     "rubysilver leggings.png": Legs,
@@ -79,12 +79,12 @@ categories = {
     "rubysilver plate.png": Chest,
     "rubysilver rawhide gloves.png": Hands,
     "rubysilver vestments.png": Chest,
-    "tri-pelt doublet.png": Chest,
+    "tri-pelt doublet.png" : (Chest, .92),
     }
 
 def create_item(img_name: str, stats: dict, categories: dict) -> Union[Back, Chest, Foot, Hands, Head, Legs, Necklace, Ring]:
     item_name = img_name.replace('.png', '')
-    item_type = categories[img_name]
+    item_type = categories[img_name][0]
     return item_type(stats, item_name)
 
     
