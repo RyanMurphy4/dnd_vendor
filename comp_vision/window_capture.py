@@ -18,9 +18,9 @@ class Screencap:
     def __init__(self):
         self.trader_inventory_TL = (55, 246)
         self.trader_inventory_BR = (552, 991)
-        self.item_names = os.listdir('images')
-        self.item_images = {image.split('.')[0] : cv.imread(f"images/{image}") \
-                            for image in self.item_names}
+        # self.item_names = os.listdir('images')
+        # self.item_images = {image.split('.')[0] : cv.imread(f"images/{image}") \
+        #                     for image in self.item_names}
 
         # self.DAD = pyautogui.getWindowsWithTitle('Dark and Darker  ')[0]
         # self.DAD.activate()
@@ -130,7 +130,10 @@ class Screencap:
         item_locations = {}
         tl_x = self.trader_inventory_TL[0]
         tl_y = self.trader_inventory_TL[1]
-        image = cv.imread(f"images/{item_image_name}")
+        abs_imgs_path = 'C:/Users/mur819/Desktop/dnd_stats/images/'
+        rel_imgs_path = 'images/'
+        image = cv.imread(f"{abs_imgs_path}{item_image_name}")
+        # image = cv.imread(f"images/{item_image_name}")
 
         results = find_item(self.capture_trader_inventory(), image, threshold=threshold)
                 
@@ -143,7 +146,6 @@ class Screencap:
     
         return item_locations
     
-
     # Get a list of (x,y) coordinates for text on screen.
     def get_text_locs(self, ocr_results: list) -> dict:
         '''
@@ -235,6 +237,7 @@ class Screencap:
                 else:
                     stats['static_stats'][stat_name] = stat_value
         return stats
+    
     def ensure_stats_dict(self, image: np.array, reader, all_stats: list[str]) -> dict:
         i = -1
         while True:

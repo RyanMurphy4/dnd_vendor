@@ -55,31 +55,31 @@ stats = [
 
 # Maybe make tuple to hold threshold also?
 categories = {
-    "cobal leather gloves.png": Hands,
-    "cobalt lightfoot boots.png": Foot,
-    "demon grip gloves.png": Hands,
-    "golden armet.png": Head,
-    "golden gauntlets.png": Hands,
-    "golden gjermundbu.png": Head,
-    "golden hounskull.png": Head,
-    "golden plate boots.png": Foot,
-    "golden plate pants.png": Legs,
-    "golden plate.png": Chest,
-    "grimsmile.png": (Ring, .7),
-    "heavy leather leggings.png": Legs,
-    "rubysilver adventurer boots.png": Foot,
-    "rubysilver barbuta helm.png": Head,
-    "rubysilver cap.png": Head,
-    "rubysilver doublet.png": (Chest, .89),
-    "rubysilver gauntlets.png": Hands,
-    "rubysilver hood.png": Head,
-    "rubysilver leggings.png": Legs,
-    "rubysilver plate boots.png": Foot,
-    "rubysilver plate pants.png": Legs,
-    "rubysilver plate.png": Chest,
-    "rubysilver rawhide gloves.png": Hands,
-    "rubysilver vestments.png": Chest,
-    "tri-pelt doublet.png" : (Chest, .92),
+    "cobal leather gloves.png": (Hands, .87),
+    "cobalt lightfoot boots.png": (Foot, .69),
+    "demon grip gloves.png": (Hands, .99),
+    # "golden armet.png": (Head, .0),
+    # "golden gauntlets.png": (Hands, .0),
+    "golden gjermundbu.png": (Head, .99),
+    "golden hounskull.png": (Head, .99),
+    "golden plate boots.png": (Foot, .99),
+    "golden plate pants.png": (Legs, .99),
+    "golden plate.png": (Chest, .99),
+    "grimsmile.png": (Ring, .81),
+    "heavy leather leggings.png": (Legs, .99), # NEED A WAY TO DIFFERENTIATE BETWEEN BOTH LEGS.
+    "rubysilver adventurer boots.png": (Foot, .99),
+    "rubysilver barbuta helm.png": (Head, .99),
+    "rubysilver cap.png": (Head, .99),
+    "rubysilver doublet.png": (Chest, .98),
+    # "rubysilver gauntlets.png": Hands,
+    # "rubysilver hood.png": Head, # Would maybe be worth it if gold isn't available.
+    # "rubysilver leggings.png": Legs,
+    # "rubysilver plate boots.png": Foot,
+    # "rubysilver plate pants.png": Legs,
+    # "rubysilver plate.png": Chest,
+    "rubysilver rawhide gloves.png": (Hands, .81), # Cannot differentiate between leather and rubysilver leather
+    # "rubysilver vestments.png": Chest, # Not Currently worth buying??
+    "tri-pelt doublet.png" : (Chest, .95), # Can't even mouse over item or it won't detect it.
     }
 
 def create_item(img_name: str, stats: dict, categories: dict) -> Union[Back, Chest, Foot, Hands, Head, Legs, Necklace, Ring]:

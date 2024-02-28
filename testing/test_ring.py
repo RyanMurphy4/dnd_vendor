@@ -17,7 +17,6 @@ import easyocr
 from comp_vision.window_capture import Screencap
 from all_stats import stats
 
-
 stats = {
     "Magical Damage Bonus": 2.7,
     "Additional Physical Damage": 2,
@@ -26,7 +25,6 @@ stats = {
     # 'Magical Power': 3,
     # "Physical Power": 1,
 }
-
 
 def generate_random_ring(num_stats) -> Ring:
     max_stats = Ring.max_stats
@@ -53,7 +51,6 @@ def generate_random_ring(num_stats) -> Ring:
         i += 1
     return Ring(stats, "Doesn't matter")
 
-
 def test_rings(num_rings: int, verbose=False) -> int:
     '''
     num_rings: Number of rings that will be created and checked.
@@ -72,14 +69,12 @@ def test_rings(num_rings: int, verbose=False) -> int:
         print(f"Total rings purchased: {worth}/{num_rings}")
     return worth
 
-
 def test_get_stats_dict(reader):
     sc = Screencap()
     while True:
         if keyboard.is_pressed('k'):
             os.system('clear')
             screenshot = sc.take_screenshot()
-
             stats_dict = sc.ensure_stats_dict(screenshot, reader, stats)
             
             if stats_dict.get('random_stats') and stats_dict.get('static_stats'):
@@ -92,9 +87,6 @@ def test_get_stats_dict(reader):
             exit()
 
         time.sleep(.02)
-
-
-
 
 if __name__ == "__main__":
     reader = easyocr.Reader(lang_list=['en'],
