@@ -2,13 +2,6 @@ import os
 import sys
 # sys.path.insert(1, 'Users\\mur819\\Desktop\\dnd_stats\\slots')
 sys.path.append("../")
-from slots.back import Back
-from slots.chest import Chest
-from slots.foot import Foot
-from slots.hands import Hands
-from slots.head import Head
-from slots.legs import Legs
-from slots.necklace import Necklace
 from slots.ring import Ring
 import random
 import keyboard
