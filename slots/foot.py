@@ -38,6 +38,13 @@ class Foot:
         'Strength',
     ]
 
+    gold_comp_stats = [
+        'Vigor',
+        'Strength',
+        'Dexterity',
+        'Will',
+    ]
+
     def __init__(self, item_stats: dict, item_name: str=None):
         self.item_name = item_name
         self.random_stats = item_stats.get('random_stats', None)
@@ -97,8 +104,7 @@ class Foot:
     
         return False
     
-    def buy_cobalt_boots(self) -> bool:
-        
+    def buy_cobalt_boots(self) -> bool:        
         num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
         num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .4)
         num_move_stats, move_stats = self.check_stats(self.movement_stats, 0, .5)
@@ -110,6 +116,9 @@ class Foot:
         # Only take double stas on these.
         if any(stat == 2 for stat in stats):
             return True
+        
+    def buy_golden_plate_boots(self) -> bool:
+        ...
 
     def worth_buying(self) -> bool:
         if self.item_name == 'rubysilver adventure boots':
@@ -118,7 +127,9 @@ class Foot:
         if self.item_name == 'cobalt lightfoot boots':
             if self.buy_cobalt_boots():
                 return True
-            
+        if self.item_name == 'golden plate boots':
+            if self.buy_golden_plate_boots():
+                return True            
         return False
     
     def __repr__(self):

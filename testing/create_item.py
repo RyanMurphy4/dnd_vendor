@@ -64,6 +64,9 @@ def create_item(item_type: str, item_name: str, num_stats: int) -> Union[Back,
         if item_name == 'tri-pelt doublet':
             if chosen_stat == 'Max Health Bonus':
                 continue
+        if item_name == 'golden hounskull':
+            if chosen_stat == 'Vigor':
+                continue
         if chosen_stat in stats['random_stats']:
             continue
         
@@ -80,6 +83,7 @@ def create_item(item_type: str, item_name: str, num_stats: int) -> Union[Back,
     return class_type(stats, item_name=item_name)
 
 def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
+
     '''
     item_type (str): Slot that item belongs to Example: 'chest'
 
@@ -97,12 +101,15 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
             stop_condition = True
 
         count += 1
-    print(f"Created: {count} items. Worth buying: {temp_item}")
+    
+    # print(f"Created: {count} {item_name}'s before one was worth buying.")
+    # print(f"{item_name}: {temp_item}")
+    
 
 
 
 for _ in range(10):
-    test_worth_buying('foot', 'cobalt lightfoot boots', 2)
-    
+    test_worth_buying('head', 'golden hounskull', 4)
+
 
 
