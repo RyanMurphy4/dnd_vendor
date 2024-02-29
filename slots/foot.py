@@ -96,10 +96,30 @@ class Foot:
                 return True
     
         return False
+    
+    def buy_cobalt_boots(self) -> bool:
         
+        num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
+        num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .4)
+        num_move_stats, move_stats = self.check_stats(self.movement_stats, 0, .5)
+        
+        stats = [num_health_stats,
+                 num_move_stats,
+                 num_phys_stats]
+        
+        # Only take double stas on these.
+        if any(stat == 2 for stat in stats):
+            return True
+
     def worth_buying(self) -> bool:
         if self.item_name == 'rubysilver adventure boots':
             if self.buy_ruby_boots():
                 return True
+        if self.item_name == 'cobalt lightfoot boots':
+            if self.buy_cobalt_boots():
+                return True
             
         return False
+    
+    def __repr__(self):
+        return f"static_stats: {self.static_stats}\nrandom_stats: {self.random_stats}"
