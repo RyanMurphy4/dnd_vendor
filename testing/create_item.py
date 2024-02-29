@@ -108,9 +108,13 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
     
 
 # golden gjermundbu
+    
+    
+# cobalt leather gloves
+#test_worth_buying('hands', 'cobalt leather gloves', 2)
 
 for _ in range(10):
-    test_worth_buying('head', 'golden gjermundbu', 4)
+    test_worth_buying('hands', 'cobalt leather gloves', 2)
 
 
 
