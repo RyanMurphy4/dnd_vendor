@@ -61,7 +61,6 @@ class Head:
         self.num_random_stats = len(item_stats.get('random_stats', ''))
         self.static_stats = item_stats.get('static_stats', None)
         self.num_static_stats = len(item_stats.get('static_stats', ''))
-        self.kuma_potential = False
 
     def check_stats(self, stat_list: list[str], threshold: int, f_threshold: float) -> int:
         '''
@@ -87,12 +86,12 @@ class Head:
     
     def buy_golden_hounskull(self) -> bool:
         num_prim_mag_stats, _= self.check_stats(self.primary_magical_stats, 0, 0)
-        num_sec_mag_stats, sec_mag_stats = self.check_stats(self.secondary_magical_stats, 0, .5)
+        num_sec_mag_stats, _ = self.check_stats(self.secondary_magical_stats, 0, .5)
         num_mag_attrib, _ = self.check_stats(self.magical_attributes, 0, 0)
         num_health_stats, _= self.check_stats(self.health_stats, 1, .4)
         num_comp_mag_stats, _ = self.check_stats(self.comp_magical_stats, 0, 0)
 
-        num_phys_stats, phys_stats = self.check_stats(self.physical_stats,  0, .5)
+        num_phys_stats, _ = self.check_stats(self.physical_stats,  0, .5)
         num_phys_attrib, _ = self.check_stats(self.physical_attributes, 0, .3)
     
         # For now skip completely if it doesn't have ANY additional health
@@ -112,14 +111,65 @@ class Head:
                 if num_comp_mag_stats or num_sec_mag_stats: # Agility or magic power/ magic damage
                     print(f"GOOD FOR CLERIC: {self.random_stats}\n")
                     return True
-    
+                
+        # Good for fighter
+        if num_phys_stats: # Phys damage / Phys power
+            if num_phys_stats + num_health_stats == 4:
+                print(f"GOOD FOR FIGHTER: {self.random_stats}\n")
+                return True
+            if num_phys_attrib:
+                if (num_phys_stats + num_phys_attrib + num_health_stats ) == 4:
+                    print(f"GOOD FOR FIGHTER: {self.random_stats}\n")
+                    return True
+
         return False
+
+    def buy_golden_gjermundbu(self) -> bool:
+        num_health_stats, _ = self.check_stats(self.health_stats, 0, .4)
+        num_phys_stats, _ = self.check_stats(self.physical_stats, 0, .5)
+        num_phys_attr, _ = self.check_stats(self.physical_attributes, 0, .3)
+        
+        # Check for agility also..
+        agility_stat, _ = self.check_stats(self.comp_magical_stats, 0, 0)
+
+        total = sum([
+            num_health_stats,
+            num_phys_stats,
+            num_phys_attr,
+        ])
+
+        # More thorough approach in item_notes/hounskull.txt
+        if total == 4:
+            return True
+        elif total + agility_stat == 4:
+            return True
+        else:
+            return False
+
+    def buy_ruby_barbuta(self) -> bool:
+        num_phys_stats, _ = self.check_stats(self.physical_stats, 0, .5)
+        num_health_stats = self.check_stats(self.health_stats, 1, .4)
+
+        if (num_phys_stats + num_health_stats) == 3:
+            return True
+        else:
+            return False
+        
+
 
     def worth_buying(self) -> bool:
         if self.item_name == 'golden hounskull':
             if self.buy_golden_hounskull():
                 return True
+        if self.item_name == 'golden gjermundbu':
+            if self.buy_golden_gjermundbu():
+                return True
+        if self.item_name == 'rubysilver barbuta helm':
+            if self.buy_ruby_barbuta():
+                return True
             
+        
         return False
+    
     def __repr__(self):
-        return f"static_stats: {self.static_stats}\nrandom_stats: {self.random_stats}"
+        return f"random_stats: {self.random_stats}"

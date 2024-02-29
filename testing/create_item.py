@@ -102,14 +102,15 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
 
         count += 1
     
-    # print(f"Created: {count} {item_name}'s before one was worth buying.")
-    # print(f"{item_name}: {temp_item}")
+    print(f"Created: {count} {item_name}'s before one was worth buying.")
+    print(f"{item_name}: {temp_item}")
+    print('\n')
     
 
-
+# golden gjermundbu
 
 for _ in range(10):
-    test_worth_buying('head', 'golden hounskull', 4)
+    test_worth_buying('head', 'golden gjermundbu', 4)
 
 
 
