@@ -113,7 +113,11 @@ class Foot:
                  num_move_stats,
                  num_phys_stats]
         
-        # Only take double stas on these.
+        if 'Additional Move Speed' in move_stats:
+            if 'Physical Power' in phys_stats:
+                return True
+            
+        
         if any(stat == 2 for stat in stats):
             return True
         

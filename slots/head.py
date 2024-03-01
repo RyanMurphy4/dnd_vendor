@@ -130,7 +130,7 @@ class Head:
         num_phys_attr, _ = self.check_stats(self.physical_attributes, 0, .3)
         
         # Check for agility also..
-        agility_stat, _ = self.check_stats(self.comp_magical_stats, 0, 0)
+        # agility_stat, _ = self.check_stats(self.comp_magical_stats, 0, 0)
 
         total = sum([
             num_health_stats,
@@ -141,8 +141,8 @@ class Head:
         # More thorough approach in item_notes/hounskull.txt
         if total == 4:
             return True
-        elif total + agility_stat == 4:
-            return True
+        # elif total + agility_stat == 4:
+        #     return True
         else:
             return False
 
@@ -155,8 +155,6 @@ class Head:
         else:
             return False
         
-
-
     def worth_buying(self) -> bool:
         if self.item_name == 'golden hounskull':
             if self.buy_golden_hounskull():
@@ -168,7 +166,6 @@ class Head:
             if self.buy_ruby_barbuta():
                 return True
             
-        
         return False
     
     def __repr__(self):
