@@ -119,6 +119,7 @@ class Foot:
         
     def buy_golden_plate_boots(self) -> bool:
         ...
+        # Maybe in a future update.. Heavy boots are just better in every way.
 
     def worth_buying(self) -> bool:
         if self.item_name == 'rubysilver adventure boots':

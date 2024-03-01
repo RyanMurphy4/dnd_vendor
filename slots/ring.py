@@ -77,7 +77,7 @@ class Ring:
                     return True
         return False
     
-    ##TODO Add threshold?
+    #TODO Refactor to similar style to other slot classes.
     def has_related_secondary_stat(self) -> int:
         '''
         Returns amount of secondary damage stats the ring contains.

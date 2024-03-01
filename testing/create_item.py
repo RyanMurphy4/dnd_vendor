@@ -22,8 +22,47 @@ item_types = {
     "ring": Ring,
 }
 
+def stat_is_static(stat, item_name):
+    restricted = {
+        "Will": [
+            'cobalt leather gloves',
+            'rubysilver rawhide gloves',
+        ],
 
+        "Strength": [
+            'demon grip gloves',
+        ],
 
+        "Dexterity": [
+            'rubysilver adventure boots',
+            'rubysilver doublet',
+            'rubysilver barbuta helm',
+            'cobalt leather gloves',
+        ],
+
+        "Vigor": [
+            'golden hounskull',
+            'golden gjermundbu',
+        ],
+
+        "Knowledge": [
+            'rubysilver rawhide gloves',
+        ],
+
+        "Agility": [
+            "cobalt trousers"
+        ],
+
+        "Max Health Bonus" : [
+            "tri-pelt doublet"
+        ]
+    }
+    contents = restricted.get(stat)
+    if not contents:
+        return False
+    else:
+        return item_name in contents
+    
 def create_item(item_type: str, item_name: str, num_stats: int) -> Union[Back,
                                                                          Chest,
                                                                          Foot,
@@ -54,19 +93,17 @@ def create_item(item_type: str, item_name: str, num_stats: int) -> Union[Back,
         health_bonus = round(random.uniform(3.0, 5), 1)
         stats['static_stats']['Max Health Bonus']= health_bonus
 
+    if item_name == "demon grip gloves":
+        magical_healing = random.randint(2, 3)
+        stats['static_stats']['Magical Healing'] = magical_healing
+
     while i != num_stats:
         chosen_stat = random.choice(list(max_stats.keys()))
 
         # Ignore static stat, since you can't roll existing static stats as random stats.
-        if item_name == 'rubysilver adventure boots' or item_name == 'rubysilver doublet':
-            if chosen_stat == 'Dexterity':
-                continue
-        if item_name == 'tri-pelt doublet':
-            if chosen_stat == 'Max Health Bonus':
-                continue
-        if item_name == 'golden hounskull':
-            if chosen_stat == 'Vigor':
-                continue
+        if stat_is_static(stat=chosen_stat, item_name=item_name):
+            continue
+
         if chosen_stat in stats['random_stats']:
             continue
         
@@ -79,7 +116,6 @@ def create_item(item_type: str, item_name: str, num_stats: int) -> Union[Back,
             stats['random_stats'][chosen_stat] = stat_value
         
         i += 1
-
     return class_type(stats, item_name=item_name)
 
 def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
@@ -96,7 +132,7 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
 
     while not stop_condition:
         temp_item = create_item(item_type, item_name, num_stats)
-        
+
         if temp_item.worth_buying():
             stop_condition = True
 
@@ -106,15 +142,15 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
     print(f"{item_name}: {temp_item}")
     print('\n')
     
-
 # golden gjermundbu
-    
-    
+
 # cobalt leather gloves
-#test_worth_buying('hands', 'cobalt leather gloves', 2)
+# test_worth_buying('hands', 'cobalt leather gloves', 2)
+    
+# rubysilver rawhide gloves
+# test_worth_buying('hands', 'rubysilver rawhide gloves', 3)
 
-for _ in range(10):
-    test_worth_buying('hands', 'cobalt leather gloves', 2)
-
-
-
+for _ in range(20):
+    test_worth_buying('hands', 'demon grip gloves', 2)
+    # test_worth_buying('hands', 'rubysilver rawhide gloves', 3)
+    

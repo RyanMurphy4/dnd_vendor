@@ -57,6 +57,7 @@ stats = [
 categories = {
     "cobal leather gloves.png": (Hands, .87),
     "cobalt lightfoot boots.png": (Foot, .69),
+    "cobalt trousers.png": (Legs, .81),
     "demon grip gloves.png": (Hands, .99),
     # "golden armet.png": (Head, .0),
     # "golden gauntlets.png": (Hands, .0),

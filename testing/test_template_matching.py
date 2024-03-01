@@ -37,7 +37,7 @@ def test_image(image_name: str) -> Tuple[str, int]:
             break
     return image_name, start
 
-image_name = 'cobalt leather gloves.png' # Item to be tested.
+image_name = 'cobalt trousers.png' # Item to be tested.
 name, thresh = test_image(image_name)
 # thresh = .95 # Overwrite determined threshold with specific threshold to test.
 

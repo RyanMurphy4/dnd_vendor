@@ -44,7 +44,7 @@ class Hands:
         "Magical Damage Bonus",
         "Magical Power"
     ]
-    
+
     def __init__(self, item_stats: dict, item_name: str=None):
         self.item_name = item_name
         self.random_stats = item_stats.get('random_stats')
@@ -73,8 +73,7 @@ class Hands:
                     num_stats += 1
                     chosen_stats.append(stat)
         return num_stats, chosen_stats
-    
-    
+        
     def buy_cobalt_gloves(self) -> bool:
         num_prim_phys_stats, _ = self.check_stats(self.primary_physical_stats, 0, 0)
         num_sec_phys_stats, _ = self.check_stats(self.secondary_physical_stats, 0, .2)
@@ -89,9 +88,38 @@ class Hands:
                 return True
             return False
 
-    
     def buy_rubysilver_gloves(self) -> bool:
-        ...
+        num_magical_stats, _ = self.check_stats(self.magical_stats, 0, .3)
+        num_health_stats, _ = self.check_stats(self.health_stats, 1, .3)
+        has_vigor, _ = self.check_stats(['Vigor'], 0, 0)
+        total = num_magical_stats + num_health_stats + has_vigor
+
+        if num_health_stats + has_vigor == 3:
+            return True
+        
+        if num_magical_stats:
+            pass
+        if total == 3:
+            return True
+        else:
+            return False
+        
+    def buy_demon_gloves(self) -> bool:
+        if self.static_stats.get('Magical Healing') != 3:
+            return False
+        num_mag_stats, magic_stats = self.check_stats(self.magical_stats, 0, .3)
+        num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .3)
+        knowledge, _ = self.check_stats(['Knowledge'], 0, 0)
+        vigor, _ = self.check_stats(['Vigor'], 0, 0)
+        total = num_mag_stats + num_health_stats + knowledge
+
+        if 'Max Health' in health_stats:
+            if vigor:
+                return True
+        
+        if total == 2:
+            return True
+        return False
 
     def worth_buying(self) -> bool:
         if self.item_name == 'cobalt leather gloves':
@@ -101,9 +129,11 @@ class Hands:
         if self.item_name == 'rubysilver rawhide gloves':
             if self.buy_rubysilver_gloves():
                 return True
-        
+            
+        if self.item_name == 'demon grip gloves':
+            if self.buy_demon_gloves():
+                return True
         return False
     
     def __repr__(self) -> str:
         return f"random_stats: {self.random_stats}"
-    
