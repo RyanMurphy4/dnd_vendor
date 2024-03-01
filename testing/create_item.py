@@ -31,6 +31,7 @@ def stat_is_static(stat, item_name):
 
         "Strength": [
             'demon grip gloves',
+            'wolf hunter leggings'
         ],
 
         "Dexterity": [
@@ -55,6 +56,9 @@ def stat_is_static(stat, item_name):
 
         "Max Health Bonus" : [
             "tri-pelt doublet"
+        ],
+        'Max Health': [
+            'wolf hunter leggings'
         ]
     }
     contents = restricted.get(stat)
@@ -154,7 +158,9 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
 # cobalt trousers
 # test_worth_buying('legs', 'cobalt trousers', 2)
 
-
+# wolf hunter leggings
+# test_worth_buying('legs', 'wolf hunter leggings', 2)
+    
 for _ in range(20):
-    test_worth_buying('legs', 'cobalt trousers', 2)
+    test_worth_buying('legs', 'wolf hunter leggings', 2)
     

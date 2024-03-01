@@ -81,30 +81,48 @@ class Legs:
         num_move_stats, move_stats = self.check_stats(self.move_stats, 0, .3)
         num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .4)
         num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
+        num_mag_stats, magic_stats = self.check_stats(self.magical_stats, 0, .5)
 
+        
         add_move = True if 'Additional Move Speed' in move_stats else False
         phys_power = True if 'Physical Power' in phys_stats else False
+        mag_power = True if 'Magical Power' in magic_stats else False
         max_health = True if 'Max Health' in health_stats else False
 
         
         if add_move:
-            if phys_power or max_health:
+            if phys_power or max_health or mag_power:
                 return True
 
         if num_move_stats == 2:
             return True
         
-        if num_move_stats:
-            if num_phys_stats:
-                return True
+        if num_move_stats and num_phys_stats:
+            return True
             
         return False
 
-    def buy_wolf_hunter(self) -> bool:
-        # 2 dex, 5 move speed
-        # 3.4% phys, 5 move speed
 
-        ...
+    # 2 dex, 5 move speed
+    # 3.4% phys, 5 move speed
+    def buy_wolf_hunter(self) -> bool:
+        num_move_stats, move_stats = self.check_stats(self.move_stats, 0, .3)
+        num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
+        num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .4)
+        dex, _ = self.check_stats(['Dexterity'], 0, 0)
+        add_move = True if 'Additional Move Speed' in move_stats else False
+        phys_power = True if 'Physical Power' in phys_stats else False
+        max_health = True if 'Max Health' in health_stats else False
+
+        if add_move and (dex or phys_power or max_health):
+            return True
+        if num_move_stats and num_phys_stats:
+            return True
+        if num_move_stats and num_health_stats:
+            return True
+        
+        return False    
+    
     def buy_demonclad(self) -> bool:
         ...
 
