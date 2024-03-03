@@ -83,7 +83,6 @@ class Legs:
         num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
         num_mag_stats, magic_stats = self.check_stats(self.magical_stats, 0, .5)
 
-        
         add_move = True if 'Additional Move Speed' in move_stats else False
         phys_power = True if 'Physical Power' in phys_stats else False
         mag_power = True if 'Magical Power' in magic_stats else False
@@ -102,9 +101,6 @@ class Legs:
             
         return False
 
-
-    # 2 dex, 5 move speed
-    # 3.4% phys, 5 move speed
     def buy_wolf_hunter(self) -> bool:
         num_move_stats, move_stats = self.check_stats(self.move_stats, 0, .3)
         num_phys_stats, phys_stats = self.check_stats(self.physical_stats, 0, .5)
@@ -138,7 +134,6 @@ class Legs:
         if num_health_stats or num_magical_stats:
             return True
 
-
     def worth_buying(self) -> bool:
         if self.item_name == 'cobalt trousers':
             if self.buy_cobalt_trousers():
@@ -149,6 +144,7 @@ class Legs:
         if self.item_name == 'demonclad leggings':
             if self.buy_demonclad():
                 return True
+        return False
     
     def __repr__(self) -> str:
         return f"{self.random_stats}"

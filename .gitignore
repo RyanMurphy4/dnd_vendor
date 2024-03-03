@@ -165,3 +165,4 @@ images/
 slots/__pycache__
 layout.txt
 images_skip/
+seen_items/

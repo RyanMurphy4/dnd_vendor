@@ -55,7 +55,7 @@ stats = [
 
 # Maybe make tuple to hold threshold also?
 categories = {
-    "cobal leather gloves.png": (Hands, .87),
+    "cobalt leather gloves.png": (Hands, .87),
     "cobalt lightfoot boots.png": (Foot, .69),
     "cobalt trousers.png": (Legs, .81),
     "demon grip gloves.png": (Hands, .99),

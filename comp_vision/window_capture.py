@@ -221,10 +221,14 @@ class Screencap:
             "random_stats" : {},
             "static_stats": {},
         }
-        # start = time.perf_counter()
-        # image = cv.fastNlMeansDenoising(image)
-        # print(f"Denoising took: {time.perf_counter() - start}")
-        results = reader.readtext(image, detail=False, paragraph=False, height_ths=.8, width_ths=.8)
+        noise_removed = cv.fastNlMeansDenoisingColored(image,
+                                                    None,
+                                                    h=10,
+                                                    hColor=None,
+                                                    templateWindowSize=7,
+                                                    searchWindowSize=21)
+
+        results = reader.readtext(noise_removed, detail=False, paragraph=False, height_ths=.8, width_ths=.8)
 
         # Wolf hunter / demonclad legs share the same image. 
         if any('wolf hunter leggings' == item.lower() for item in results):
@@ -259,9 +263,9 @@ class Screencap:
             static_stats = stats_dict['static_stats'].values()
 
             none_value = None in random_stats or None in static_stats
-            if not none_value:
+            if not none_value and random_stats:
                 print(f"Success: {i+1}/10 attempts.")
-                return stats_dict
+                return stats_dict, stats_image
                 
     def can_afford(self) -> bool:
         screenshot = self.take_screenshot()

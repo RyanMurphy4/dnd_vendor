@@ -148,7 +148,7 @@ class Head:
 
     def buy_ruby_barbuta(self) -> bool:
         num_phys_stats, _ = self.check_stats(self.physical_stats, 0, .5)
-        num_health_stats = self.check_stats(self.health_stats, 1, .4)
+        num_health_stats, _ = self.check_stats(self.health_stats, 1, .4)
 
         if (num_phys_stats + num_health_stats) == 3:
             return True
