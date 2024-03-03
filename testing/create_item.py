@@ -160,7 +160,8 @@ def test_worth_buying(item_type: str, item_name: str, num_stats: int) -> None:
 
 # wolf hunter leggings
 # test_worth_buying('legs', 'wolf hunter leggings', 2)
-    
-for _ in range(20):
-    test_worth_buying('legs', 'demonclad leggings', 2)
+
+if __name__ == "__main__":
+    for _ in range(20):
+        test_worth_buying('legs', 'demonclad leggings', 2)
     

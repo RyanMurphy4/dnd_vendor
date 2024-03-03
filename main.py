@@ -1,19 +1,19 @@
+from datetime import datetime
 import keyboard
 import easyocr
 import time
 import cv2 as cv
 from comp_vision.window_capture import Screencap
 import pyautogui
-from all_stats import stats, categories, create_item 
+from all_stats import stats, categories
+from testing.create_item import create_item
 import os
 from slots.ring import Ring
+from slots.legs import Legs
 from comp_vision.item_finder import find_item
 
-
 def click_service(duration: int=1) -> None:
-    # x = 299
-    # y = 146
-
+    # x, y = 299, 146
     time.sleep(.3)
     pyautogui.moveTo(x=299, y=146, duration=duration)
     time.sleep(.2)
@@ -29,9 +29,72 @@ def browse_merchant(merchant_name: str, text_locations: dict) -> None:
     time.sleep(1)
     pyautogui.click()
 
+def jiggle_mouse(iterations: int) -> None:
+    for _ in range(iterations):
+        pyautogui.moveRel(1,1)
+        time.sleep(.01)
+        pyautogui.moveRel(-1, -1)
+        time.sleep(.01)
+        
+def move_mouse_from_items() -> None:
+    pyautogui.moveTo(0,0)
 
-# Threshold for grimstone ring ~70
-# Threshold for armorer .98
+def get_log_dir() -> str:
+    seen_items_dir = "seen_items/"
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    if os.path.isdir(seen_items_dir):
+        print("Directory Already exists")
+    else:
+        print("Directory containing items encountered doesn't exist")
+        print(f"Creating directory '{seen_items_dir}' now.")
+        os.mkdir(seen_items_dir)
+        print("Directory Created.")
+    
+    if os.path.isdir(f"seen_items/{current_date}/"):
+        print(f"Directory for '{current_date}' has already been created.")
+    else:
+        os.mkdir(f"seen_items/{current_date}/")
+    
+    return f"{seen_items_dir}{current_date}/"
+
+def get_nums_from_time()-> str:
+    current_time = time.time()
+    after_dec = str(current_time).split('.')[-1]
+    
+    return after_dec
+
+def get_image_name(slots_item, dir_path: str) -> str:
+    images = os.listdir(dir_path)
+    item_name = slots_item.item_name
+    same_type_images = [image for image in images if item_name in image]
+    highest = 0 if same_type_images else None
+
+    
+    if highest != None:
+        for image in same_type_images:
+            try:
+                num = int("".join([c for c in image if c.isdigit()]))
+                if num > highest:
+                    highest = num
+            except Exception as e:
+                print(f"An error occured parsing image number: {e}")
+        highest += 1
+    elif highest == None:
+        highest = 0
+
+    return f"{dir_path}{item_name}-{highest}.png"
+
+def save_item():
+    legs = create_item('legs', 'demonclad leggings', 2)
+    x = get_image_name(legs, get_log_dir())
+    with open(f"{x}.txt", 'w') as f:
+        f.write('Yo!')
+
+    print(x)
+
+def save_to_log(image):
+    ...
+
 service = (299, 146)
 
 # Screencap object take and interact with screenshots.
@@ -41,87 +104,5 @@ screen_manager = Screencap()
 reader = easyocr.Reader(lang_list=['en'],
                         detector='dbnet18')
 
-# img_name = "tri-pelt doublet.png"
-# img_path = f"images/{img_name}"
 
-# item_locations = screen_manager.get_single_item_location(img_name, .8)
-
-# for key, value in item_locations.items():
-#     item_name = key
-#     coordinates = value[0]
-#     pyautogui.moveTo(x=coordinates[0], y=coordinates[1], duration=.8)
-#     time.sleep(.01)
-#     pyautogui.moveRel(1,1)
-#     time.sleep(1)
-#     current_screen = screen_manager.take_screenshot()
-#     stats_dict = screen_manager.ensure_stats_dict(current_screen, reader, stats)
-
-#     created_item = create_item(key, stats_dict, categories)
-#     print(created_item.num_stats)
-
-
-directory = "images/"
-image_names = os.listdir(directory)
-
-screenshot = screen_manager.take_screenshot()
-results = reader.readtext(screenshot, detail=True, paragraph=False)
-text_locations = screen_manager.get_text_locs(results)
-
-skip_for_now = [
-    'rubysilver hood.png',
-    'rubysilver vestments.png',
-]
-merchants_to_browse = [ 
-    'alchemist', 
-    'tailor'
-]
-
-for merch in merchants_to_browse:
-    browse_merchant(merch, text_locations)
-    time.sleep(.3)
-    click_service(.2)
-    
-    for image in image_names:
-        if isinstance(categories.get(image), tuple):
-            thresh = categories.get(image)[1]
-        else:
-            continue
-        
-        # Template matching to find image inside of traders inventory.
-        item_locations = screen_manager.get_single_item_location(image, thresh)
-
-        for key, value in item_locations.items():
-            if key in skip_for_now:
-                print(f"Skipping item {key} until .worth_buying() is implemented.\n")
-                time.sleep(.5)
-                continue
-
-            coordinates = value[0]
-            pyautogui.moveTo(x=coordinates[0], y=coordinates[1], duration=.4)
-            time.sleep(.1)
-            pyautogui.moveRel(1,1)
-            pyautogui.moveRel(1,1)
-            pyautogui.moveRel(1,1)
-            time.sleep(1)
-            current_screen = screen_manager.take_screenshot()
-            stats_dict = screen_manager.ensure_stats_dict(current_screen, reader=reader, all_stats=stats)
-
-            item = create_item(key, stats_dict, categories)
-            print("\n")
-            print(f"Created Item: {item}")
-            print(f"This time is worth buying: {item.worth_buying()}")
-            print('\n')
-            time.sleep(1)
-            pyautogui.moveTo(x=999, y=995)
-            time.sleep(1)
-
-
-    print(f"Finished with {merch}")
-    time.sleep(1)
-    keyboard.press('escape')
-    time.sleep(.1)
-    keyboard.release('escape')
-    time.sleep(1)
-
-
-
+save_item()
