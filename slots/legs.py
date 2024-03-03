@@ -124,7 +124,20 @@ class Legs:
         return False    
     
     def buy_demonclad(self) -> bool:
-        ...
+        num_move_stats, move_stats = self.check_stats(self.move_stats, 0, .3)
+        num_health_stats, health_stats = self.check_stats(self.health_stats, 0, .3)
+        num_magical_stats, magic_stats = self.check_stats(self.magical_stats, 0, .5)
+
+        add_move = True if 'Additional Move Speed' in move_stats else False
+
+        if not num_move_stats:
+            return False
+        
+        if num_move_stats == 2:
+            return True
+        if num_health_stats or num_magical_stats:
+            return True
+
 
     def worth_buying(self) -> bool:
         if self.item_name == 'cobalt trousers':
